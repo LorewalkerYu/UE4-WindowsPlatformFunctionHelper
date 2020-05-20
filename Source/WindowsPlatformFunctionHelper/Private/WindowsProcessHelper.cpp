@@ -43,7 +43,7 @@ int32 UWindowsProcessHelper::CurrentRunningProcNum()
 
 bool UWindowsProcessHelper::CheckingProcRunning()
 {
-	UE_LOG(LogTemp, Error, TEXT("CheckingProcRunning"));
+	
 	TArray<FRunningProc> FinishedProc;
 	for (const FRunningProc& RunningProc : RunningProcs)
 	{
@@ -60,6 +60,28 @@ bool UWindowsProcessHelper::CheckingProcRunning()
 	}
 
 	return RunningProcs.Num() > 0;
+}
+
+void UWindowsProcessHelper::CloseProc(const FGuid& Guid)
+{
+	FRunningProc TargetProc;
+	bool bFind = false;
+	for (FRunningProc& Proc : RunningProcs)
+	{
+		if (Proc.Guid == Guid)
+		{
+			TargetProc = Proc;
+			bFind = true;
+			break;
+		}
+	}
+	if (bFind)
+	{
+		RunningProcs.Remove(TargetProc);
+		FPlatformProcess::TerminateProc(TargetProc.Handle);
+		UE_LOG(LogTemp, Error, TEXT("TerminateProc"));
+	}
+
 }
 
 void UWindowsProcessHelper::BeginDestroy()

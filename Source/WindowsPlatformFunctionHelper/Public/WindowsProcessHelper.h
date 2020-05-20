@@ -49,6 +49,9 @@ public:
         int32 CurrentRunningProcNum();
     bool CheckingProcRunning();
 
+	UFUNCTION(BlueprintCallable, Category = "WindowsProcessHelper|Excutable")
+		void CloseProc(const FGuid& Guid);
+
     virtual void BeginDestroy() override;
 protected:
 
